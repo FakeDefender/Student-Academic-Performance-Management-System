@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.mybatis.spring.annotation.MapperScan;
 
 @SpringBootApplication
-@MapperScan("com.fx.backend.domain.mapper")
+@MapperScan({"com.fx.backend.mapper"})
 public class BackendApplication {
 
     public static void main(String[] args) {
