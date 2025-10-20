@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fx.backend.domain.mapper.GradeMapper">
+
+    <resultMap id="GradeResultMap" type="com.fx.backend.domain.entity.Grade">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="semester" column="semester"/>
+        <result property="academicYear" column="academic_year"/>
+        <result property="score" column="score"/>
+        <result property="gradeLetter" column="grade_letter"/>
+        <result property="isPassed" column="is_passed"/>
+        <result property="examType" column="exam_type"/>
+        <result property="remarks" column="remarks"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.fx.backend.domain.entity.Grade" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO grades (student_id, course_id, teacher_id, semester, academic_year, score, grade_letter, is_passed, exam_type, remarks)
+        VALUES (#{studentId}, #{courseId}, #{teacherId}, #{semester}, #{academicYear}, #{score}, #{gradeLetter}, #{isPassed}, #{examType}, #{remarks})
+    </insert>
+
+    <update id="update" parameterType="com.fx.backend.domain.entity.Grade">
+        UPDATE grades
+        SET score = #{score}, grade_letter = #{gradeLetter}, is_passed = #{isPassed}, remarks = #{remarks}
+        WHERE id = #{id}
+    </update>
+
+    <select id="findById" resultMap="GradeResultMap">
+        SELECT * FROM grades WHERE id = #{id}
+    </select>
+
+    <select id="findByStudent" resultMap="GradeResultMap">
+        SELECT * FROM grades
+        WHERE student_id = #{studentId}
+        <if test="semester != null and semester != ''">
+            AND semester = #{semester}
+        </if>
+        <if test="academicYear != null and academicYear != ''">
+            AND academic_year = #{academicYear}
+        </if>
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="countByStudentId" resultType="int">
+        SELECT COUNT(1) FROM grades WHERE student_id = #{studentId}
+    </select>
+
+    <select id="countByCourseId" resultType="int">
+        SELECT COUNT(1) FROM grades WHERE course_id = #{courseId}
+    </select>
+
+    <select id="countByTeacherId" resultType="int">
+        SELECT COUNT(1) FROM grades WHERE teacher_id = #{teacherId}
+    </select>
+
+</mapper>
+
+
