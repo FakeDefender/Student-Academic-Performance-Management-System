@@ -27,6 +27,8 @@ public class TimePeriodService {
 
     public List<TimePeriod> listActive() { return timePeriodMapper.listActive(); }
 
+    public List<TimePeriod> listAll() { return timePeriodMapper.listAll(); }
+
     public void assertOpenNow() {
         int cnt = timePeriodMapper.countActiveNow(LocalDateTime.now());
         if (cnt <= 0) {

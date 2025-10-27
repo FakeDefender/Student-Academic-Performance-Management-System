@@ -9,6 +9,11 @@
         <result property="name" column="name"/>
         <result property="className" column="class_name"/>
         <result property="major" column="major"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="address" column="address"/>
+        <result property="remarks" column="remarks"/>
+        <result property="grade" column="grade"/>
         <result property="enrollmentDate" column="enrollment_date"/>
         <result property="graduationDate" column="graduation_date"/>
         <result property="status" column="status"/>
@@ -17,8 +22,8 @@
     </resultMap>
 
     <insert id="insert" parameterType="com.fx.backend.domain.entity.Student" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO students (user_id, student_id, name, class_name, major, enrollment_date, graduation_date, status)
-        VALUES (#{userId}, #{studentId}, #{name}, #{className}, #{major}, #{enrollmentDate}, #{graduationDate}, #{status})
+        INSERT INTO students (user_id, student_id, name, class_name, major, email, phone, address, remarks, grade, enrollment_date, graduation_date, status)
+        VALUES (#{userId}, #{studentId}, #{name}, #{className}, #{major}, #{email}, #{phone}, #{address}, #{remarks}, #{grade}, #{enrollmentDate}, #{graduationDate}, #{status})
     </insert>
 
     <select id="findById" resultMap="StudentResultMap">
@@ -29,10 +34,19 @@
         SELECT * FROM students WHERE student_id = #{studentId}
     </select>
 
+    <select id="findByStudentNumber" resultMap="StudentResultMap">
+        SELECT * FROM students WHERE student_id = #{studentNumber}
+    </select>
+
+    <select id="findByUserId" resultMap="StudentResultMap">
+        SELECT * FROM students WHERE user_id = #{userId}
+    </select>
+
     <update id="update" parameterType="com.fx.backend.domain.entity.Student">
         UPDATE students
-        SET name = #{name}, class_name = #{className}, major = #{major}, status = #{status},
-            enrollment_date = #{enrollmentDate}, graduation_date = #{graduationDate}
+        SET name = #{name}, class_name = #{className}, major = #{major}, email = #{email}, 
+            phone = #{phone}, address = #{address}, remarks = #{remarks}, grade = #{grade},
+            status = #{status}, enrollment_date = #{enrollmentDate}, graduation_date = #{graduationDate}
         WHERE id = #{id}
     </update>
 

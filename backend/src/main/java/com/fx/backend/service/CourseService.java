@@ -4,6 +4,7 @@ import com.fx.backend.common.exception.BusinessException;
 import com.fx.backend.domain.entity.Course;
 import com.fx.backend.mapper.CourseMapper;
 import com.fx.backend.mapper.GradeMapper;
+import com.fx.backend.mapper.TeacherCourseMapper;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +18,12 @@ import com.fx.backend.common.api.PageResponse;
 public class CourseService {
     private final CourseMapper courseMapper;
     private final GradeMapper gradeMapper;
+    private final TeacherCourseMapper teacherCourseMapper;
 
-    public CourseService(CourseMapper courseMapper, GradeMapper gradeMapper) {
+    public CourseService(CourseMapper courseMapper, GradeMapper gradeMapper, TeacherCourseMapper teacherCourseMapper) {
         this.courseMapper = courseMapper;
         this.gradeMapper = gradeMapper;
+        this.teacherCourseMapper = teacherCourseMapper;
     }
 
     @Transactional
@@ -44,6 +47,10 @@ public class CourseService {
         List<Course> list = courseMapper.page(keyword, department, isActive, pr.offset(), pr.getPageSize());
         long total = courseMapper.count(keyword, department, isActive);
         return PageResponse.of(total, pr.getPageNo(), pr.getPageSize(), list);
+    }
+
+    public List<Course> findByTeacherId(Long teacherId) {
+        return courseMapper.findByTeacherId(teacherId);
     }
 }
 

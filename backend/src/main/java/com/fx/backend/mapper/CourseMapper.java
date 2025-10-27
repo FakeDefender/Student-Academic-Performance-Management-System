@@ -20,6 +20,8 @@ public interface CourseMapper {
     long count(@Param("keyword") String keyword,
                @Param("department") String department,
                @Param("isActive") Boolean isActive);
+    
+    java.util.List<Course> findByTeacherId(@Param("teacherId") Long teacherId);
 }
 
 

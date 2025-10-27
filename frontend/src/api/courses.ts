@@ -20,4 +20,19 @@ export async function deleteCourse(id: number) {
   return res.data
 }
 
+export async function getCourses() {
+  const res = await http.get('/courses')
+  return res.data
+}
+
+export async function getMyCourses() {
+  const res = await http.get('/courses/my-courses')
+  return res.data
+}
+
+export async function getCourseStudents(courseId: number) {
+  const res = await http.get(`/courses/${courseId}/students`)
+  return res.data
+}
+
 

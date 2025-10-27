@@ -71,6 +71,23 @@
         </where>
     </select>
 
+    <select id="findByTeacherId" resultMap="CourseResultMap">
+        SELECT 
+            c.id,
+            c.course_code,
+            c.course_name,
+            c.credits,
+            c.department,
+            c.description,
+            c.is_active,
+            c.created_at,
+            c.updated_at
+        FROM courses c
+        INNER JOIN teacher_courses tc ON c.id = tc.course_id
+        WHERE tc.teacher_id = #{teacherId}
+        ORDER BY c.created_at DESC
+    </select>
+
 </mapper>
 
 

@@ -13,6 +13,7 @@ public interface TimePeriodMapper {
     int deleteById(@Param("id") Long id);
     Optional<TimePeriod> findById(@Param("id") Long id);
     List<TimePeriod> listActive();
+    List<TimePeriod> listAll();
     int countActiveNow(@Param("now") LocalDateTime now);
 }
 

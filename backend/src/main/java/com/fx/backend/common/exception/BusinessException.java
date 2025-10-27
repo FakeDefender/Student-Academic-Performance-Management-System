@@ -1,5 +1,8 @@
 package com.fx.backend.common.exception;
 
+import lombok.Getter;
+
+@Getter
 public class BusinessException extends RuntimeException {
 
     private final String code;
@@ -9,9 +12,6 @@ public class BusinessException extends RuntimeException {
         this.code = code;
     }
 
-    public String getCode() {
-        return code;
-    }
 }
 
 

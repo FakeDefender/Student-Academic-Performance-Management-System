@@ -47,6 +47,27 @@ public class StudentService {
         long total = studentMapper.count(keyword, status);
         return PageResponse.of(total, pr.getPageNo(), pr.getPageSize(), list);
     }
-}
 
+    public Student findByStudentId(String studentId) {
+        return studentMapper.findByStudentId(studentId).orElse(null);
+    }
+
+    public Student findByUserId(Long userId) {
+        return studentMapper.findByUserId(userId).orElse(null);
+    }
+
+    public void updateProfile(Student student) {
+        Student existing = findByStudentId(student.getStudentId());
+        if (existing == null) {
+            throw new BusinessException("STUDENT_NOT_FOUND", "学生不存在");
+        }
+        existing.setName(student.getName());
+        existing.setClassName(student.getClassName());
+        existing.setMajor(student.getMajor());
+        existing.setEnrollmentDate(student.getEnrollmentDate());
+        existing.setGraduationDate(student.getGraduationDate());
+        existing.setStatus(student.getStatus());
+        studentMapper.update(existing);
+    }
+}
 

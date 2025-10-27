@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fx.backend.mapper.TeacherCourseMapper">
+
+    <resultMap id="TeacherCourseResultMap" type="com.fx.backend.domain.entity.TeacherCourse">
+        <id property="id" column="id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.fx.backend.domain.entity.TeacherCourse" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO teacher_courses (teacher_id, course_id)
+        VALUES (#{teacherId}, #{courseId})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM teacher_courses WHERE id = #{id}
+    </delete>
+
+    <select id="findByTeacherId" resultMap="TeacherCourseResultMap">
+        SELECT * FROM teacher_courses WHERE teacher_id = #{teacherId}
+    </select>
+
+    <select id="findByCourseId" resultMap="TeacherCourseResultMap">
+        SELECT * FROM teacher_courses WHERE course_id = #{courseId}
+    </select>
+
+    <select id="existsByTeacherAndCourse" resultType="boolean">
+        SELECT COUNT(1) > 0 FROM teacher_courses 
+        WHERE teacher_id = #{teacherId} AND course_id = #{courseId}
+    </select>
+
+    <select id="findCourseIdsByTeacherId" resultType="Long">
+        SELECT course_id FROM teacher_courses WHERE teacher_id = #{teacherId}
+    </select>
+
+    <select id="findStudentIdsByTeacherId" resultType="Long">
+        SELECT DISTINCT g.student_id 
+        FROM grades g 
+        INNER JOIN teacher_courses tc ON g.course_id = tc.course_id 
+        WHERE tc.teacher_id = #{teacherId}
+    </select>
+
+</mapper>

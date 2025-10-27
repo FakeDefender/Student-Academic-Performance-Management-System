@@ -11,7 +11,6 @@ export default function AdminTeachers() {
   const [keyword, setKeyword] = useState<string | undefined>()
 
   const columns = [
-    { title: 'ID', dataIndex: 'id' },
     { title: '工号', dataIndex: 'teacherId' },
     { title: '姓名', dataIndex: 'name' },
     { title: '部门', dataIndex: 'department' },

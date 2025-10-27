@@ -20,4 +20,14 @@ export async function deleteStudent(id: number) {
   return res.data
 }
 
+export async function getStudentProfile() {
+  const res = await http.get('/students/profile')
+  return res.data
+}
+
+export async function updateStudentProfile(payload: any) {
+  const res = await http.put('/students/profile', payload)
+  return res.data
+}
+
 

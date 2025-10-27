@@ -10,6 +10,11 @@ public class Student {
     private String name;
     private String className;
     private String major;
+    private String email;
+    private String phone;
+    private String address;
+    private String remarks;
+    private String grade; // 年级
     private LocalDate enrollmentDate;
     private LocalDate graduationDate;
     private String status; // ACTIVE, GRADUATED, SUSPENDED
@@ -28,6 +33,16 @@ public class Student {
     public void setClassName(String className) { this.className = className; }
     public String getMajor() { return major; }
     public void setMajor(String major) { this.major = major; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
+    public String getRemarks() { return remarks; }
+    public void setRemarks(String remarks) { this.remarks = remarks; }
+    public String getGrade() { return grade; }
+    public void setGrade(String grade) { this.grade = grade; }
     public LocalDate getEnrollmentDate() { return enrollmentDate; }
     public void setEnrollmentDate(LocalDate enrollmentDate) { this.enrollmentDate = enrollmentDate; }
     public LocalDate getGraduationDate() { return graduationDate; }

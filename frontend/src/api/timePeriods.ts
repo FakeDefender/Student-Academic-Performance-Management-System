@@ -20,4 +20,9 @@ export async function deleteTimePeriod(id: number) {
   return res.data
 }
 
+export async function getTimePeriods() {
+  const res = await http.get('/time-periods')
+  return res.data
+}
+
 

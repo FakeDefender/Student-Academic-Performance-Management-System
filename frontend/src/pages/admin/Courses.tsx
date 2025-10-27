@@ -11,7 +11,6 @@ export default function AdminCourses() {
   const [keyword, setKeyword] = useState<string | undefined>()
 
   const columns = [
-    { title: 'ID', dataIndex: 'id' },
     { title: '课程代码', dataIndex: 'courseCode' },
     { title: '课程名称', dataIndex: 'courseName' },
     { title: '学分', dataIndex: 'credits' },

@@ -1,6 +1,7 @@
 package com.fx.backend.interfaces;
 
 import com.fx.backend.common.api.ApiResponse;
+import com.fx.backend.common.jwt.RoleRequired;
 import com.fx.backend.domain.entity.TimePeriod;
 import com.fx.backend.service.TimePeriodService;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/time-periods")
+@RoleRequired({"ADMIN", "TEACHER"})
 public class TimePeriodController {
     private final TimePeriodService timePeriodService;
 
@@ -23,6 +25,9 @@ public class TimePeriodController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) { timePeriodService.delete(id); return ResponseEntity.ok(ApiResponse.ok(null)); }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<TimePeriod>>> list() { return ResponseEntity.ok(ApiResponse.ok(timePeriodService.listAll())); }
 
     @GetMapping("/active")
     public ResponseEntity<ApiResponse<List<TimePeriod>>> active() { return ResponseEntity.ok(ApiResponse.ok(timePeriodService.listActive())); }

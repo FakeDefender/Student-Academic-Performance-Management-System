@@ -18,6 +18,40 @@
         <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
+    <resultMap id="GradeWithCourseInfoResultMap" type="com.fx.backend.domain.entity.GradeWithCourseInfo">
+        <id property="id" column="id"/>
+        <result property="studentId" column="student_id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="teacherId" column="teacher_id"/>
+        <result property="courseName" column="course_name"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="semester" column="semester"/>
+        <result property="academicYear" column="academic_year"/>
+        <result property="score" column="score"/>
+        <result property="gradeLetter" column="grade_letter"/>
+        <result property="isPassed" column="is_passed"/>
+        <result property="examType" column="exam_type"/>
+        <result property="remarks" column="remarks"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <resultMap id="StudentCourseInfoResultMap" type="com.fx.backend.domain.entity.StudentCourseInfo">
+        <result property="studentId" column="student_id"/>
+        <result property="studentNumber" column="student_number"/>
+        <result property="studentName" column="student_name"/>
+        <result property="className" column="class_name"/>
+        <result property="major" column="major"/>
+        <result property="courseId" column="course_id"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="courseName" column="course_name"/>
+        <result property="latestScore" column="latest_score"/>
+        <result property="latestGradeLetter" column="latest_grade_letter"/>
+        <result property="latestIsPassed" column="latest_is_passed"/>
+        <result property="latestSemester" column="latest_semester"/>
+        <result property="latestAcademicYear" column="latest_academic_year"/>
+    </resultMap>
+
     <insert id="insert" parameterType="com.fx.backend.domain.entity.Grade" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO grades (student_id, course_id, teacher_id, semester, academic_year, score, grade_letter, is_passed, exam_type, remarks)
         VALUES (#{studentId}, #{courseId}, #{teacherId}, #{semester}, #{academicYear}, #{score}, #{gradeLetter}, #{isPassed}, #{examType}, #{remarks})
@@ -45,6 +79,20 @@
         ORDER BY created_at DESC
     </select>
 
+    <select id="findByStudentWithCourseInfo" resultMap="GradeWithCourseInfoResultMap">
+        SELECT g.*, c.course_name, c.course_code
+        FROM grades g
+        LEFT JOIN courses c ON g.course_id = c.id
+        WHERE g.student_id = #{studentId}
+        <if test="semester != null and semester != ''">
+            AND g.semester = #{semester}
+        </if>
+        <if test="academicYear != null and academicYear != ''">
+            AND g.academic_year = #{academicYear}
+        </if>
+        ORDER BY g.created_at DESC
+    </select>
+
     <select id="countByStudentId" resultType="int">
         SELECT COUNT(1) FROM grades WHERE student_id = #{studentId}
     </select>
@@ -55,6 +103,49 @@
 
     <select id="countByTeacherId" resultType="int">
         SELECT COUNT(1) FROM grades WHERE teacher_id = #{teacherId}
+    </select>
+
+    <select id="findByStudentCourseSemesterYear" resultMap="GradeResultMap">
+        SELECT * FROM grades 
+        WHERE student_id = #{studentId} 
+        AND course_id = #{courseId} 
+        AND semester = #{semester} 
+        AND academic_year = #{academicYear}
+        LIMIT 1
+    </select>
+
+    <select id="findStudentsByCourse" resultMap="StudentCourseInfoResultMap">
+        SELECT DISTINCT
+            s.id as student_id,
+            s.student_id as student_number,
+            s.name as student_name,
+            s.class_name,
+            s.major,
+            c.id as course_id,
+            c.course_code,
+            c.course_name,
+            latest_g.score as latest_score,
+            latest_g.grade_letter as latest_grade_letter,
+            latest_g.is_passed as latest_is_passed,
+            latest_g.semester as latest_semester,
+            latest_g.academic_year as latest_academic_year
+        FROM students s
+        INNER JOIN grades g ON s.id = g.student_id
+        INNER JOIN courses c ON g.course_id = c.id
+        LEFT JOIN (
+            SELECT 
+                student_id, 
+                course_id,
+                score,
+                grade_letter,
+                is_passed,
+                semester,
+                academic_year,
+                ROW_NUMBER() OVER (PARTITION BY student_id, course_id ORDER BY created_at DESC) as rn
+            FROM grades
+        ) latest_g ON s.id = latest_g.student_id AND c.id = latest_g.course_id AND latest_g.rn = 1
+        WHERE c.id = #{courseId}
+        ORDER BY s.student_id
     </select>
 
 </mapper>

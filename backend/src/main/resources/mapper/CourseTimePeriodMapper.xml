@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fx.backend.mapper.CourseTimePeriodMapper">
+
+    <resultMap id="CourseTimePeriodResultMap" type="com.fx.backend.domain.entity.CourseTimePeriod">
+        <id property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="timePeriodId" column="time_period_id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.fx.backend.domain.entity.CourseTimePeriod" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO course_time_periods (course_id, time_period_id)
+        VALUES (#{courseId}, #{timePeriodId})
+    </insert>
+
+    <delete id="deleteById">
+        DELETE FROM course_time_periods WHERE id = #{id}
+    </delete>
+
+    <select id="findByCourseId" resultMap="CourseTimePeriodResultMap">
+        SELECT * FROM course_time_periods WHERE course_id = #{courseId}
+    </select>
+
+    <select id="findByTimePeriodId" resultMap="CourseTimePeriodResultMap">
+        SELECT * FROM course_time_periods WHERE time_period_id = #{timePeriodId}
+    </select>
+
+    <resultMap id="CourseTimePeriodDetailResultMap" type="com.fx.backend.domain.entity.CourseTimePeriodDetail">
+        <id property="id" column="id"/>
+        <result property="courseId" column="course_id"/>
+        <result property="timePeriodId" column="time_period_id"/>
+        <result property="courseCode" column="course_code"/>
+        <result property="courseName" column="course_name"/>
+        <result property="timePeriodName" column="time_period_name"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
+    <select id="findDetailsByTimePeriodId" resultMap="CourseTimePeriodDetailResultMap">
+        SELECT 
+            ctp.id,
+            ctp.course_id,
+            ctp.time_period_id,
+            c.course_code,
+            c.course_name,
+            tp.name as time_period_name,
+            ctp.created_at,
+            ctp.updated_at
+        FROM course_time_periods ctp
+        LEFT JOIN courses c ON ctp.course_id = c.id
+        LEFT JOIN time_periods tp ON ctp.time_period_id = tp.id
+        WHERE ctp.time_period_id = #{timePeriodId}
+    </select>
+
+    <select id="existsByCourseAndTimePeriod" resultType="boolean">
+        SELECT COUNT(1) > 0 FROM course_time_periods 
+        WHERE course_id = #{courseId} AND time_period_id = #{timePeriodId}
+    </select>
+
+    <select id="findTimePeriodIdsByCourseId" resultType="Long">
+        SELECT time_period_id FROM course_time_periods WHERE course_id = #{courseId}
+    </select>
+
+    <select id="isCourseTimePeriodActive" resultType="boolean">
+        SELECT COUNT(1) > 0 
+        FROM course_time_periods ctp
+        INNER JOIN time_periods tp ON ctp.time_period_id = tp.id
+        WHERE ctp.course_id = #{courseId} 
+        AND tp.is_active = TRUE 
+        AND tp.start_date &lt;= NOW() 
+        AND tp.end_date &gt;= NOW()
+    </select>
+
+</mapper>

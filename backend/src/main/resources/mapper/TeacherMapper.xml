@@ -28,6 +28,14 @@
         SELECT * FROM teachers WHERE teacher_id = #{teacherId}
     </select>
 
+    <select id="findByUserId" resultMap="TeacherResultMap">
+        SELECT * FROM teachers WHERE user_id = #{userId}
+    </select>
+
+    <select id="findByTeacherNumber" resultMap="TeacherResultMap">
+        SELECT * FROM teachers WHERE teacher_id = #{teacherNumber}
+    </select>
+
     <update id="update" parameterType="com.fx.backend.domain.entity.Teacher">
         UPDATE teachers
         SET name = #{name}, department = #{department}, title = #{title}, phone = #{phone}, office = #{office}

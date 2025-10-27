@@ -37,6 +37,10 @@
         SELECT * FROM time_periods WHERE is_active = TRUE ORDER BY start_date DESC
     </select>
 
+    <select id="listAll" resultMap="TimePeriodResultMap">
+        SELECT * FROM time_periods ORDER BY created_at DESC
+    </select>
+
     <select id="countActiveNow" resultType="int">
         SELECT COUNT(1)
         FROM time_periods
